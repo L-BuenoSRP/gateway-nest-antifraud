@@ -1,0 +1,32 @@
+services:
+
+  nestjs:
+    build: .
+    container_name: nestjs
+    ports:
+      - 3001:3000
+      - 5555:5555
+    volumes:
+      - .:/home/node/app
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - go-gateway_default
+    
+  nestjs-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=gateway-imersao25
+      - POSTGRES_DB=gateway
+    volumes:
+      - postgres_data_anti_fraud:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - go-gateway_default
+      
+networks:
+  go-gateway_default:
+#     external: true
+
+volumes:
+  postgres_data_anti_fraud:
